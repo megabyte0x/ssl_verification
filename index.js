@@ -11,8 +11,9 @@ async function getCertificateChain(url) {
 
     const req = https.request(options, async (res) => {
         const certificate = res.socket.getPeerCertificate(true);
-        console.log("Complete Certificate \n", certificate);
+
         if (certificate.raw) {
+
             let server_certitificate = certificate.raw.toString('base64');
             let server_certitificate_data = `${"-----BEGIN CERTIFICATE-----\n" + server_certitificate + "\n-----END CERTIFICATE-----"}`;
             fs.writeFile('fetched/server_cert.pem', server_certitificate_data, (err) => {
@@ -24,6 +25,7 @@ async function getCertificateChain(url) {
             });
 
             if (certificate.issuerCertificate) {
+
                 let intermediate_certitificate = certificate.issuerCertificate.raw.toString('base64');
                 let intermediate_certitificate_data = `${"-----BEGIN CERTIFICATE-----\n" + intermediate_certitificate + "\n-----END CERTIFICATE-----"}`;
                 fs.writeFile('fetched/intermediate_cert.pem', intermediate_certitificate_data, (err) => {
@@ -35,8 +37,9 @@ async function getCertificateChain(url) {
                 });
 
                 if (certificate.issuerCertificate.issuerCertificate) {
+
                     let root_certitificate = certificate.issuerCertificate.issuerCertificate.raw.toString('base64');
-                    let root_certitificate_data = `${"\n-----BEGIN CERTIFICATE-----\n" + root_certitificate + "\n-----END CERTIFICATE-----"}`;
+                    let root_certitificate_data = `${"-----BEGIN CERTIFICATE-----\n" + root_certitificate + "\n-----END CERTIFICATE-----"}`;
                     fs.writeFile('fetched/root_cert.pem', root_certitificate_data, (err) => {
                         if (err) {
                             console.error(err);
@@ -57,4 +60,4 @@ async function getCertificateChain(url) {
     req.end();
 }
 
-getCertificateChain('0rbit.co');
+getCertificateChain('megabyte0x.xyz');
